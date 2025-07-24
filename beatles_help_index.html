@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Beatles - Help! Movie Index</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .timestamp {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .card-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .card-type {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .card-type.musical {
+            background: #f093fb;
+        }
+
+        .card-type.action {
+            background: #f6d365;
+            color: #333;
+        }
+
+        .card-type.comedy {
+            background: #4facfe;
+        }
+
+        .play-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #667eea;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover .play-icon {
+            opacity: 1;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            opacity: 0.8;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            body {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎵 The Beatles - Help! 🎵</h1>
+            <p>Interactive Movie Index | 1965 Classic</p>
+        </div>
+
+        <div class="cards-grid" id="cardsGrid">
+            <!-- Cards will be populated by JavaScript -->
+        </div>
+
+        <div class="footer">
+            <p>Click any card to jump to that moment in the movie on YouTube</p>
+        </div>
+    </div>
+
+    <script>
+        const movieSegments = [
+            {
+                title: "Opening Kali Temple Ritual",
+                timestamp: "0:07",
+                seconds: 7,
+                description: "The movie opens with a dramatic temple ceremony featuring chanting about the mystical Kali. This establishes the religious cult storyline that drives the entire plot.",
+                type: "drama",
+                image: "beatles_screenshots/01_temple_ritual.jpg"
+            },
+            {
+                title: "Help! - Opening Credits",
+                timestamp: "1:08",
+                seconds: 68,
+                description: "The iconic title song performed by The Beatles during the opening credits sequence. This classic track introduces our heroes and sets up the ring plot device.",
+                type: "musical",
+                image: "beatles_screenshots/02_help_opening.jpg"
+            },
+            {
+                title: "Ring Discovery Comedy",
+                timestamp: "3:26",
+                seconds: 206,
+                description: "The sacrificial ring is discovered and the Beatles become involved when it gets stuck. Classic Beatles humor as the plot thickens with chase elements.",
+                type: "comedy",
+                image: "beatles_screenshots/03_ring_discovery.jpg"
+            },
+            {
+                title: "You're Going to Lose That Girl",
+                timestamp: "13:00",
+                seconds: 780,
+                description: "One of the major musical sequences where the Beatles perform this energetic song with characteristic harmonies in what appears to be a recording studio setting.",
+                type: "musical",
+                image: "beatles_screenshots/04_lose_that_girl.jpg"
+            },
+            {
+                title: "Restaurant Chase Scene",
+                timestamp: "15:16",
+                seconds: 916,
+                description: "Comedy sequence in a restaurant setting with the cult's pursuit of the Beatles. Features the film's signature slapstick humor and adventure elements.",
+                type: "action",
+                image: "beatles_screenshots/05_restaurant_chase.jpg"
+            },
+            {
+                title: "You've Got to Hide Your Love Away",
+                timestamp: "27:52",
+                seconds: 1672,
+                description: "A more introspective musical moment featuring this contemplative Beatles song, providing a quieter break between the film's action sequences.",
+                type: "musical",
+                image: "beatles_screenshots/06_hide_love_away.jpg"
+            },
+            {
+                title: "Ticket to Ride",
+                timestamp: "38:01",
+                seconds: 2281,
+                description: "Major musical sequence featuring one of the Beatles' biggest hits. Performed in a scenic outdoor location, showcasing the band's musical prowess.",
+                type: "musical",
+                image: "beatles_screenshots/07_ticket_to_ride.jpg"
+            },
+            {
+                title: "I Need You",
+                timestamp: "48:22",
+                seconds: 2902,
+                description: "Emotional ballad performance that provides character development and romantic elements, showcasing the softer side of the Beatles' musical range.",
+                type: "musical",
+                image: "beatles_screenshots/08_i_need_you.jpg"
+            },
+            {
+                title: "The Night Before",
+                timestamp: "52:33",
+                seconds: 3153,
+                description: "Performance of this album track that continues the film's integration of Beatles songs into the narrative structure as the adventure reaches its peak.",
+                type: "musical",
+                image: "beatles_screenshots/09_night_before.jpg"
+            },
+            {
+                title: "Another Girl",
+                timestamp: "1:11:25",
+                seconds: 4285,
+                description: "Later musical sequence featuring this upbeat Beatles song, likely part of the film's climactic sequences as the storyline reaches resolution.",
+                type: "musical",
+                image: "beatles_screenshots/10_another_girl.jpg"
+            },
+            {
+                title: "Help! - Final Reprise",
+                timestamp: "1:27:05",
+                seconds: 5225,
+                description: "The movie concludes with a reprise of the title song, bringing the adventure full circle as our heroes escape their predicament.",
+                type: "musical",
+                image: "beatles_screenshots/11_help_reprise.jpg"
+            }
+        ];
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+        }
+
+        function createCard(segment) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            
+            const youtubeUrl = `https://youtu.be/ahsDL_kMCBg?t=${segment.seconds}`;
+            
+            card.innerHTML = `
+                <div class="card-image" style="background-image: url('${segment.image}');">
+                    <div class="play-icon">▶</div>
+                    <div class="timestamp">${segment.timestamp}</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-title">${segment.title}</div>
+                    <div class="card-description">${segment.description}</div>
+                    <span class="card-type ${segment.type}">${segment.type.toUpperCase()}</span>
+                </div>
+            `;
+            
+            card.addEventListener('click', () => {
+                window.open(youtubeUrl, '_blank');
+            });
+            
+            return card;
+        }
+
+        function initializeApp() {
+            const cardsGrid = document.getElementById('cardsGrid');
+            
+            movieSegments.forEach(segment => {
+                const card = createCard(segment);
+                cardsGrid.appendChild(card);
+            });
+        }
+
+        // Initialize the app when the page loads
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+</body>
+</html>
